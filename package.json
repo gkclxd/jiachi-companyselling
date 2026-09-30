@@ -1,0 +1,17 @@
+{
+  "name": "valuation-blindspot-scanner",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "公司估值盲點掃描器 — 獨立研究者的觀念參考工具",
+  "scripts": {
+    "install:all": "npm --prefix backend install && npm --prefix frontend install",
+    "dev:api": "npm --prefix backend run dev",
+    "dev:web": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build",
+    "build:demo": "npm --prefix frontend run build:demo",
+    "start": "npm --prefix backend start",
+    "test": "node --test shared/test/*.test.js"
+  },
+  "engines": { "node": ">=20.10" }
+}

@@ -1,0 +1,28 @@
+{
+  "_meta": {
+    "asOf": "2026 Q3",
+    "note": "私人中小型企業 EBITDA 倍數參考基準（使用者提供之數據，引用來源標示為 CT Acquisitions、Breakwater、VantaInsights 等公開報告）。實際倍數依規模、地區與交易條件差異甚大，請自行核實後更新本檔。",
+    "sources": ["CT Acquisitions", "Breakwater", "VantaInsights"]
+  },
+  "industries": {
+    "B2B SaaS":              { "label": "B2B SaaS",   "min": 8.0, "median": 11.0, "max": 14.0, "top": 18.0 },
+    "B2C SaaS":              { "label": "B2C SaaS",   "min": 5.0, "median": 7.0,  "max": 9.0,  "top": 12.0 },
+    "E-commerce":            { "label": "電子商務",    "min": 2.5, "median": 3.5,  "max": 5.0,  "top": 7.0 },
+    "Professional Services": { "label": "專業服務",    "min": 4.5, "median": 5.8,  "max": 7.0,  "top": 9.0 },
+    "Manufacturing":         { "label": "製造業",      "min": 4.2, "median": 5.5,  "max": 6.8,  "top": 8.5 },
+    "Healthcare":            { "label": "醫療保健",    "min": 6.0, "median": 8.0,  "max": 10.0, "top": 13.0 },
+    "Consumer Goods":        { "label": "消費品",      "min": 3.5, "median": 5.0,  "max": 6.5,  "top": 8.0 },
+    "Other":                 { "label": "其他",        "min": 4.0, "median": 6.0,  "max": 8.0,  "top": 10.0 }
+  },
+  "topTier": {
+    "_note": "B2B SaaS 與電子商務為使用者規格提供之數值；其餘行業為本工具依產業常見特性設定的參考假設，建議自行校準。",
+    "B2B SaaS":              { "NRR": 120, "rule_of_40": 50, "customer_concentration": 15, "contract_term": 12, "gross_margin": 75 },
+    "B2C SaaS":              { "NRR": 105, "rule_of_40": 40, "customer_concentration": 5,  "contract_term": 12, "gross_margin": 75 },
+    "E-commerce":            { "NRR": 110, "rule_of_40": 40, "customer_concentration": 20, "contract_term": 1,  "gross_margin": 40 },
+    "Professional Services": { "NRR": 105, "rule_of_40": 30, "customer_concentration": 15, "contract_term": 12, "gross_margin": 45 },
+    "Manufacturing":         { "NRR": 100, "rule_of_40": 25, "customer_concentration": 15, "contract_term": 24, "gross_margin": 35 },
+    "Healthcare":            { "NRR": 105, "rule_of_40": 35, "customer_concentration": 15, "contract_term": 24, "gross_margin": 55 },
+    "Consumer Goods":        { "NRR": 100, "rule_of_40": 30, "customer_concentration": 20, "contract_term": 12, "gross_margin": 45 },
+    "Other":                 { "NRR": 105, "rule_of_40": 30, "customer_concentration": 15, "contract_term": 12, "gross_margin": 50 }
+  }
+}

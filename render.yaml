@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: valuation-blindspot-scanner
+    runtime: node
+    plan: free
+    buildCommand: npm run install:all && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health

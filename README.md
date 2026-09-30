@@ -1,2 +1,71 @@
-# jiachi-companyselling
-A business diagnostic tool that helps owners identify blind spots in financial performance, customer concentration, operational efficiency, and business value. Get actionable insights and discover areas that may require professional advice.
+# 公司估值盲點掃描器
+
+> 公司到底值多少？用數據驗證盲區。
+> 本工具僅供觀念參考，不構成財務建議。不賣產品，不接個案。
+
+獨立研究者的觀念參考工具：五個模組，協助企業主快速辨識估值盲點。完全免費、無登入、不儲存任何輸入資料、不使用分析追蹤。
+
+| 模組 | 內容 |
+|---|---|
+| 1 快速估值掃描器 | 行業 EBITDA 倍數 × 成長 / 集中度 / 重複性收入調整 → EV 區間與盲點提示 |
+| 2 行業倍數比較器 | 目前倍數在行業中的位置、五項頂級指標差距、優化後估值提升 |
+| 3 估值盲點診斷儀 | 15 項盲點問卷 → 0-100 分、紅黃綠優先級、修復前後估值 |
+| 4 退出情境模擬器 | 現在 / 1 / 3 / 5 年退出、買方類型、敏感性分析、風險折現 |
+| 5 買方視角評估器 | 四種買方的估值邏輯、出價區間、交易結構、盡調重點 |
+
+## 技術架構
+
+```
+shared/            計算引擎（純函式）+ 基準資料 JSON + 單元測試
+  engine.js
+  data/industries.json   行業倍數與頂級標準（2026 Q3）
+  data/blindspots.json   15 項盲點
+  data/buyers.json       四種買方
+backend/           Express API（所有計算在此執行）
+frontend/          React 18 + Vite + Tailwind CSS 4
+```
+
+- 前端只負責輸入與顯示，所有計算呼叫 `POST /api/{scan|compare|diagnose|exit|buyers}`。
+- 後端不寫入資料庫或檔案，日誌只記錄路徑與狀態碼；每分鐘每 IP 120 次限流。
+- 分享連結把「輸入值」編碼在網址 `?d=` 參數中，伺服器端不保存。
+- `npm run build:demo` 會產出單一 HTML 的離線預覽版（引擎內嵌於瀏覽器），僅供展示用。
+
+## 本機開發
+
+需要 Node.js 20.10 以上。
+
+```bash
+npm run install:all
+npm run dev:api     # http://localhost:8787
+npm run dev:web     # http://localhost:5173（/api 自動代理到 8787）
+npm test            # 計算引擎單元測試
+```
+
+## 部署
+
+**方案 A：單一服務（最簡單，推薦）** — Railway 或 Render 部署整個 repo，後端同時提供前端靜態檔。
+- Railway：已附 `railway.json`，連結 GitHub repo 即可。
+- Render：已附 `render.yaml`（Blueprint），免費方案可用（閒置後首次喚醒約需 30 秒）。
+
+**方案 B：前後端分離（Vercel + Railway）**
+1. Railway 部署後端（同上），設定環境變數 `CORS_ORIGIN=https://你的前端網域`。
+2. Vercel 匯入 repo，Root Directory 設為 `frontend`，環境變數 `VITE_API_URL=https://你的後端網域`。
+
+## 更新基準數據
+
+行業倍數與頂級標準位於 `shared/data/industries.json`，修改後重新部署即可，無須改程式。
+B2B SaaS 與電子商務的頂級標準取自原始規格；其餘行業的頂級標準為本工具設定的參考假設，建議自行校準。
+
+## 與原始規格的差異
+
+- **模組 4 利潤率對倍數的影響**：規格公式 `1 + 利潤率提升 × 0.1` 會使利潤率 +5pt 時估值 ×1.5，與其註解「每 1% 利潤率，倍數 +0.1x」不符。本工具依註解實作：`(目前倍數 + 0.1 × 提升pt) ÷ 目前倍數`。
+- **模組 5 買方差異倍數**：依買方係數（1.35 ÷ 0.65）計算為約 2.1 倍，而非規格文字中的 3.4 倍。
+- **「70% 創始人至少忽略 3 項盲點」**：顯示為產業經驗說法，並註明非本工具統計。
+- 模組 3 評分：高 / 中 / 低優先級每項扣 9 / 5 / 4 分（合計 100），「不確定」扣一半。折價型盲點以乘法疊加，最多累計折價 60%；「行業倍數誤用」「成長率過度樂觀」屬估值認知偏差，「稅務規劃」影響稅後實收，這三項另外列示，不計入企業價值修復。
+- 模組 4 額外提供以 20% 風險折現率折回今天的價值，協助判斷「延後退出」是否划算。
+
+## 下一輪可做
+
+- PDF 報告下載
+- 英文介面
+- 結果截圖分享（html2canvas）
